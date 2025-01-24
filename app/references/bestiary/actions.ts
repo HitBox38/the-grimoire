@@ -27,8 +27,10 @@ export const fetchMonsters = async () => {
   }
 };
 
-export const fetchMonster = async (id: string) => {
+export const fetchMonster = async (id: string | null) => {
   try {
+    if (!id) return;
+
     const docRef = doc(firebaseDB, "monsters", id);
 
     const docSnap = await getDoc(docRef);

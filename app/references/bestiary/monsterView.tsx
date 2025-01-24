@@ -12,8 +12,9 @@ export default function MonsterView() {
   const monsterId = params.get("monsterId");
 
   const { data, isFetching } = useQuery({
-    queryKey: ["monster", monsterId],
-    queryFn: () => (monsterId ? fetchMonster(monsterId) : undefined),
+    queryKey: monsterId ? ["monster", monsterId] : ["no-monster"],
+    queryFn: () => fetchMonster(monsterId),
+    enabled: !!monsterId,
   });
 
   return (
