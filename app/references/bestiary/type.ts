@@ -14,6 +14,7 @@ export interface Monster extends MonsterBase {
   hitDice: string;
   hitPointsRoll: string;
   speed: Speed;
+  initiative?: number;
   proficiencies: Proficiency[];
   damageVulnerabilities: string[];
   damageResistances: string[];

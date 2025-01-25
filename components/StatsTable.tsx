@@ -35,7 +35,7 @@ export default function StatsTable({ stats }: Props) {
         <TableHeader>
           <TableRow>
             {keys.map((key, index) => (
-              <TableHead className="text-center" key={index}>
+              <TableHead className="text-center capitalize" key={index}>
                 {key}
               </TableHead>
             ))}

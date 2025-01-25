@@ -6,6 +6,7 @@ import { LoaderPinwheelIcon } from "lucide-react";
 import StatsTable from "@/components/StatsTable";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { useSearchParams } from "next/navigation";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
 export default function MonsterView() {
   const params = useSearchParams();
@@ -18,58 +19,76 @@ export default function MonsterView() {
   });
 
   return (
-    <ScrollArea className="rounded-lg border p-4 w-1/2 h-full">
+    <div className="w-1/2 h-full">
       {isFetching ? (
         <LoaderPinwheelIcon className="animate-spin" />
       ) : data ? (
-        <div className="flex flex-col items-start justify-center gap-4">
-          <h3 className="text-4xl font-bold">{data.name}</h3>
-          {data.stats ? <StatsTable stats={data.stats} /> : null}
-          <section>
-            <p>
-              <b>Hit Points: </b>
-              {data.hitPoints} ({data.hitPointsRoll})
-            </p>
-          </section>
-          <section>
-            <p>
-              <b>Armor Class: </b>
-              {data.armorClass.map((ac, index) => (
-                <span key={ac.type}>
-                  {ac.value} ({ac.type}){index !== data?.armorClass.length - 1 ? ", " : ""}
-                </span>
-              ))}
-            </p>
-          </section>
-          {data.specialAbilities && data.specialAbilities.length ? (
-            <section>
-              <b className="text-2xl">Traits</b>
-              {data.specialAbilities?.map((sa, index) => (
-                <div key={index}>
-                  <b className="text-xl">{sa.name}</b>
-                  <p>{sa.desc}</p>
-                </div>
-              ))}
-            </section>
-          ) : null}
-          {data.actions && data.actions.length ? (
-            <section>
-              <b className="text-2xl">Actions</b>
-              {data.actions?.map((a, index) => (
-                <div key={index}>
-                  <b className="text-xl">{a.name}</b>
-                  <p>{a.desc}</p>
-                  {a.attacks ? <p>{a.attacks.map((at) => at.name).join(", ")}</p> : null}
-                  {a.usage ? <p>{a.usage.type}</p> : null}
-                  {a.damage ? <p>{a.damage.map((d) => d.damageDice).join(", ")}</p> : null}
-                </div>
-              ))}
-            </section>
-          ) : null}
-        </div>
-      ) : (
-        <p>No data found.</p>
-      )}
-    </ScrollArea>
+        <Card className="h-full">
+          <ScrollArea className="h-full">
+            <CardHeader>
+              <CardTitle className="scroll-m-20 border-b pb-2 text-3xl font-semibold tracking-tight first:mt-0">
+                {data.name}
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="flex flex-col gap-4">
+              <section>
+                <p className="leading-7">
+                  <b>Hit Points: </b>
+                  {data.hitPoints} ({data.hitPointsRoll})
+                </p>
+              </section>
+              <section>
+                <p className="leading-7">
+                  <b>Armor Class: </b>
+                  {data.armorClass.map((ac, index) => (
+                    <span key={ac.type}>
+                      {ac.value} ({ac.type}){index !== data?.armorClass.length - 1 ? ", " : ""}
+                    </span>
+                  ))}
+                </p>
+              </section>
+              <section>
+                <p className="leading-7">
+                  <b>Initiative: </b>
+                  {data.initiative ?? Math.floor((data.stats.dexterity - 10) / 2)}
+                </p>
+              </section>
+              {data.stats ? <StatsTable stats={data.stats} /> : null}
+              {data.specialAbilities && data.specialAbilities.length ? (
+                <section className="flex flex-col gap-2">
+                  <h3 className="scroll-m-20 text-2xl font-semibold tracking-tight">Traits</h3>
+                  {data.specialAbilities?.map((sa, index) => (
+                    <div key={index}>
+                      <h4 className="scroll-m-20 text-xl font-semibold tracking-tight">
+                        {sa.name}
+                      </h4>
+                      <p className="leading-7 pl-4">{sa.desc}</p>
+                    </div>
+                  ))}
+                </section>
+              ) : null}
+              {data.actions && data.actions.length ? (
+                <section className="flex flex-col gap-2">
+                  <b className="scroll-m-20 text-2xl font-semibold tracking-tight">Actions</b>
+                  {data.actions?.map((a, index) => (
+                    <div key={index}>
+                      <div className="flex flex-row gap-2">
+                        <b className="text-xl">{a.name}</b>
+                        {a.usage ? (
+                          <p className="leading-7">
+                            {a.usage.times ? `${a.usage.times} times` : ""} {a.usage.type}
+                          </p>
+                        ) : null}
+                      </div>
+                      <p className="leading-7 pl-4">{a.desc}</p>
+                    </div>
+                  ))}
+                </section>
+              ) : null}
+            </CardContent>
+          </ScrollArea>
+        </Card>
+      ) : null}
+    </div>
   );
 }
