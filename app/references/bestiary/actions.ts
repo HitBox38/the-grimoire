@@ -35,11 +35,7 @@ export const fetchMonster = async (id: string | null) => {
 
     const docSnap = await getDoc(docRef);
 
-    const data = docSnap.data() as Monster;
-
-    console.log("fetchMonster", data);
-
-    return data;
+    return docSnap.data() as Monster;
   } catch (error) {
     console.error("Error fetching monster:", error);
     throw error;
