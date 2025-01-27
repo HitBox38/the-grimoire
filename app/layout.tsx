@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import localFont from "next/font/local";
 import "./globals.css";
 import QueryProvider from "./providers/QueryProvider";
+import { createClient } from "@/utils/supabase/server";
+import { redirect } from "next/navigation";
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -19,11 +21,17 @@ export const metadata: Metadata = {
   description: "A comprehensive toolset for Dungeon Masters.",
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const supabase = await createClient();
+
+  const { data, error } = await supabase.auth.getUser();
+  if (error || !data?.user) {
+    redirect("/login");
+  }
   return (
     <html lang="en">
       <body className={`dark ${geistSans.variable} ${geistMono.variable} antialiased`}>
