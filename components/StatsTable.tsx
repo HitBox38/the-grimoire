@@ -1,3 +1,4 @@
+import { calculateStatModifier } from "@/lib/calculateStatModifier";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "./ui/table";
 
 interface Props {
@@ -46,6 +47,13 @@ export default function StatsTable({ stats }: Props) {
             {values.map((value, index) => (
               <TableCell key={index} className="h-12 text-center">
                 {value}
+              </TableCell>
+            ))}
+          </TableRow>
+          <TableRow>
+            {values.map((value, index) => (
+              <TableCell key={index} className="h-12 text-center">
+                ({calculateStatModifier(value)})
               </TableCell>
             ))}
           </TableRow>

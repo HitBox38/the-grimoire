@@ -13,6 +13,7 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
+import { calculateStatModifier } from "@/lib/calculateStatModifier";
 
 export default function MonsterView() {
   const params = useSearchParams();
@@ -56,7 +57,7 @@ export default function MonsterView() {
               <section>
                 <p className="leading-7">
                   <b>Initiative: </b>
-                  {data.initiative ?? Math.floor((data.stats.dexterity - 10) / 2)}
+                  {data.initiative ?? calculateStatModifier(data.stats.dexterity)}
                 </p>
               </section>
               {data.stats ? <StatsTable stats={data.stats} /> : null}
