@@ -26,11 +26,13 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const supabase = await createClient();
+  if (window.location.pathname !== "/login") {
+    const supabase = await createClient();
 
-  const { data, error } = await supabase.auth.getUser();
-  if (error || !data?.user) {
-    redirect("/login");
+    const { data, error } = await supabase.auth.getUser();
+    if (error || !data?.user) {
+      redirect("/login");
+    }
   }
   return (
     <html lang="en">
