@@ -38,7 +38,7 @@ export default function DataTable() {
   };
 
   return !isLoading ? (
-    <ScrollArea className="rounded-md border h-full mb-4 w-1/2">
+    <ScrollArea className="rounded-md border h-full mb-4">
       <Table>
         <TableHeader>
           {table.getHeaderGroups().map((headerGroup) => (

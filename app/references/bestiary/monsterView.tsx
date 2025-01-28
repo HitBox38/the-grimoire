@@ -26,7 +26,7 @@ export default function MonsterView() {
   });
 
   return (
-    <div className="w-1/2 h-full">
+    <div className="h-full">
       {isFetching ? (
         <LoaderPinwheelIcon className="animate-spin" />
       ) : data ? (
