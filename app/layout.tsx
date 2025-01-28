@@ -4,6 +4,7 @@ import "./globals.css";
 import QueryProvider from "./providers/QueryProvider";
 import { createClient } from "@/utils/supabase/server";
 import { redirect } from "next/navigation";
+import { headers } from "next/headers";
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -26,7 +27,10 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  if (window.location.pathname !== "/login") {
+  const headersList = await headers();
+  const pathname = headersList.get("x-invoke-path") || "";
+
+  if (pathname !== "/login") {
     const supabase = await createClient();
 
     const { data, error } = await supabase.auth.getUser();
