@@ -28,7 +28,7 @@ export default async function RootLayout({
   children: React.ReactNode;
 }>) {
   const headersList = await headers();
-  const pathname = headersList.get("x-invoke-path") || "";
+  const pathname = headersList.get("x-matched-path") || "";
 
   if (pathname !== "/login") {
     const supabase = await createClient();
