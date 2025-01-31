@@ -1,5 +1,5 @@
-export const calculateStatModifier = (stat: number) => {
-  const modifier = Math.floor((stat - 10) / 2);
+export const calculateStatModifier = (stat: number, modifier: number = 0) => {
+  const newModifier = Math.floor((stat - 10) / 2) + modifier;
 
-  return modifier > 0 ? `+${modifier}` : `${modifier}`;
+  return newModifier > 0 ? `+${newModifier}` : `${newModifier}`;
 };

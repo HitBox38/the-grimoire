@@ -4,7 +4,7 @@ import MonsterView from "./monsterView";
 
 export default function Bestiary() {
   return (
-    <ResizablePanelGroup direction="horizontal">
+    <ResizablePanelGroup direction="horizontal" className="px-4 pb-4">
       <ResizablePanel>
         <DataTable />
       </ResizablePanel>

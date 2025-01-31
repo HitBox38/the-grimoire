@@ -35,6 +35,7 @@ export interface Monster extends MonsterBase {
   subtype?: string;
   reactions?: Reaction[];
   forms?: ConditionImmunity[];
+  source?: string;
 }
 
 export interface MonsterAction {
