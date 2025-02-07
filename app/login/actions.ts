@@ -1,46 +1,49 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
-import { redirect } from "next/navigation";
-
 import { createClient } from "@/utils/supabase/server";
+import { NextResponse } from "next/server";
 
-export async function login(formData: FormData) {
-  const supabase = await createClient();
-
-  // type-casting here for convenience
-  // in practice, you should validate your inputs
-  const data = {
-    email: formData.get("email") as string,
-    password: formData.get("password") as string,
-  };
-
-  const { error } = await supabase.auth.signInWithPassword(data);
-
-  if (error) {
-    redirect("/error");
-  }
-
-  revalidatePath("/", "layout");
-  redirect("/");
+interface AuthPayload {
+  data: { email: string; password: string };
 }
 
-export async function signup(formData: FormData) {
+export async function login(payload: AuthPayload) {
   const supabase = await createClient();
 
-  // type-casting here for convenience
-  // TODO: add validation
-  const data = {
-    email: formData.get("email") as string,
-    password: formData.get("password") as string,
-  };
+  console.log(payload);
 
-  const { error } = await supabase.auth.signUp(data);
+  const { error } = await supabase.auth.signInWithPassword(payload.data);
 
   if (error) {
-    redirect("/error");
+    return new NextResponse(JSON.stringify({ error: error.message }), {
+      status: 400,
+      headers: { "Content-Type": "application/json" },
+    });
   }
 
   revalidatePath("/", "layout");
-  redirect("/signUpSuccess");
+  return new NextResponse(JSON.stringify({ success: true, redirect: "/" }), {
+    status: 200,
+    headers: { "Content-Type": "application/json" },
+  });
+}
+
+export async function signup(payload: AuthPayload) {
+  const supabase = await createClient();
+
+  const { error } = await supabase.auth.signUp(payload.data);
+
+  if (error) {
+    return new NextResponse(JSON.stringify({ error: error.message }), {
+      status: 400,
+      headers: { "Content-Type": "application/json" },
+    });
+  }
+
+  revalidatePath("/", "layout");
+  return new NextResponse(JSON.stringify({ success: true, redirect: "/signUpSuccess" }), {
+    status: 200,
+    headers: { "Content-Type": "application/json" },
+  });
 }
