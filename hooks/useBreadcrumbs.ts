@@ -44,9 +44,16 @@ export function useBreadcrumbs(config: BreadcrumbConfig = {}): BreadcrumbItem[] 
     // Build breadcrumbs for each segment
     let currentPath = ""
     
-    segments.forEach((segment, index) => {
+    // Split basePath to determine how many segments to skip
+    const baseSegments = basePath.split("/").filter(Boolean)
+    const remainingSegments = segments.slice(baseSegments.length)
+    
+    // Set currentPath to basePath to start from the correct position
+    currentPath = basePath === "/" ? "" : basePath
+    
+    remainingSegments.forEach((segment, index) => {
       currentPath += `/${segment}`
-      const isLast = index === segments.length - 1
+      const isLast = index === remainingSegments.length - 1
       
       // Check if we have a custom label for this path
       const label = pathLabels[currentPath] || 
