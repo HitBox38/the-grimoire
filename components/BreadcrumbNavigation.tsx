@@ -96,10 +96,18 @@ export function BreadcrumbNavigation({
       return items.map((item, index) => renderBreadcrumbItem(item, index))
     }
 
+    // Handle edge case: if maxDisplayItems is 1, only show the last item
+    if (maxDisplayItems === 1) {
+      const lastItem = items[items.length - 1]
+      return renderBreadcrumbItem(lastItem, items.length - 1)
+    }
+
     // Show first item, ellipsis dropdown, and last few items
+    // We need to account for the ellipsis taking up one "slot"
     const firstItem = items[0]
-    const lastItems = items.slice(-(maxDisplayItems - 1))
-    const hiddenItems = items.slice(1, -(maxDisplayItems - 1))
+    const numLastItems = maxDisplayItems - 2 // Reserve 1 for first item, 1 for ellipsis
+    const lastItems = items.slice(-numLastItems)
+    const hiddenItems = items.slice(1, -numLastItems)
 
     return (
       <>
