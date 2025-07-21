@@ -1,9 +1,15 @@
+"use client";
+
 import { ResizableHandle, ResizablePanel, ResizablePanelGroup } from "@/components/ui/resizable";
 import { PageHeader } from "@/components/PageHeader";
 import DataTable from "./data-table";
 import MonsterView from "./monsterView";
+import { useSearchParams } from "next/navigation";
 
 export default function Bestiary() {
+  const searchParams = useSearchParams();
+  const monsterId = searchParams.get("monsterId");
+  
   const breadcrumbItems = [
     { label: "Home", href: "/" },
     { label: "References", href: "/references" },
@@ -19,15 +25,23 @@ export default function Bestiary() {
       />
 
       <main className="container mx-auto px-4 py-6">
-        <ResizablePanelGroup direction="horizontal" className="min-h-[calc(100vh-200px)]">
-          <ResizablePanel defaultSize={50}>
+        {monsterId ? (
+          // Two-panel layout when a monster is selected
+          <ResizablePanelGroup direction="horizontal" className="min-h-[calc(100vh-200px)]">
+            <ResizablePanel defaultSize={50}>
+              <DataTable />
+            </ResizablePanel>
+            <ResizableHandle className="mx-4" withHandle />
+            <ResizablePanel defaultSize={50}>
+              <MonsterView />
+            </ResizablePanel>
+          </ResizablePanelGroup>
+        ) : (
+          // Full-width layout when no monster is selected
+          <div className="min-h-[calc(100vh-200px)]">
             <DataTable />
-          </ResizablePanel>
-          <ResizableHandle className="mx-4" withHandle />
-          <ResizablePanel defaultSize={50}>
-            <MonsterView />
-          </ResizablePanel>
-        </ResizablePanelGroup>
+          </div>
+        )}
       </main>
     </div>
   );
