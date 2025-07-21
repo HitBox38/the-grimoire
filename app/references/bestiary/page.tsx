@@ -13,6 +13,8 @@ export default function Bestiary() {
   return (
     <div className="min-h-screen bg-background">
       <PageHeader
+        title="Bestiary"
+        description="Browse and search through monsters and creatures"
         breadcrumbItems={breadcrumbItems}
       />
 
