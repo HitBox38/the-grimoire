@@ -24,9 +24,9 @@ export default function Bestiary() {
         breadcrumbItems={breadcrumbItems}
       />
 
-      <main className="container mx-auto px-4 py-6">
-        {monsterId ? (
-          // Two-panel layout when a monster is selected
+      {monsterId ? (
+        // Two-panel layout when a monster is selected
+        <main className="container mx-auto px-4 py-6">
           <ResizablePanelGroup direction="horizontal" className="min-h-[calc(100vh-200px)]">
             <ResizablePanel defaultSize={50}>
               <DataTable />
@@ -36,13 +36,15 @@ export default function Bestiary() {
               <MonsterView />
             </ResizablePanel>
           </ResizablePanelGroup>
-        ) : (
-          // Full-width layout when no monster is selected
-          <div className="min-h-[calc(100vh-200px)]">
+        </main>
+      ) : (
+        // Full-width layout when no monster is selected
+        <main className="px-4 py-6">
+          <div className="min-h-[calc(100vh-200px)] w-full">
             <DataTable />
           </div>
-        )}
-      </main>
+        </main>
+      )}
     </div>
   );
 }
