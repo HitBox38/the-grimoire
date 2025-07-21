@@ -26,21 +26,25 @@ export default function Bestiary() {
 
       {monsterId ? (
         // Two-panel layout when a monster is selected
-        <main className="container mx-auto px-4 py-6">
-          <ResizablePanelGroup direction="horizontal" className="min-h-[calc(100vh-200px)]">
-            <ResizablePanel defaultSize={50}>
-              <DataTable />
+        <main className="container mx-auto px-4 py-6 h-[calc(100vh-200px)]">
+          <ResizablePanelGroup direction="horizontal" className="h-full">
+            <ResizablePanel defaultSize={50} className="flex flex-col min-h-0">
+              <div className="h-full overflow-hidden">
+                <DataTable />
+              </div>
             </ResizablePanel>
             <ResizableHandle className="mx-4" withHandle />
-            <ResizablePanel defaultSize={50}>
-              <MonsterView />
+            <ResizablePanel defaultSize={50} className="flex flex-col min-h-0">
+              <div className="h-full overflow-hidden">
+                <MonsterView />
+              </div>
             </ResizablePanel>
           </ResizablePanelGroup>
         </main>
       ) : (
         // Full-width layout when no monster is selected
-        <main className="px-4 py-6">
-          <div className="min-h-[calc(100vh-200px)] w-full">
+        <main className="px-4 py-6 h-[calc(100vh-200px)]">
+          <div className="h-full w-full">
             <DataTable />
           </div>
         </main>
