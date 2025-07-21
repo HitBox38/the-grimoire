@@ -1,21 +1,22 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { Card, CardHeader } from "./ui/card";
-import { PageHeader } from "./PageHeader";
+import { Card, CardHeader } from "@/components/ui/card";
+import { PageHeader } from "@/components/PageHeader";
 
-export const Dashboard = () => {
+export default function References() {
   const router = useRouter();
 
   const breadcrumbItems = [
-    { label: "Home", isCurrentPage: true }
+    { label: "Home", href: "/" },
+    { label: "References", isCurrentPage: true }
   ];
 
   return (
     <div className="min-h-screen bg-background">
       <PageHeader
-        title="D&D Reference Dashboard"
-        description="Access all your D&D reference materials in one place"
+        title="D&D References"
+        description="Browse all available D&D reference materials"
         breadcrumbItems={breadcrumbItems}
       />
 
@@ -49,4 +50,4 @@ export const Dashboard = () => {
       </main>
     </div>
   );
-};
+}
