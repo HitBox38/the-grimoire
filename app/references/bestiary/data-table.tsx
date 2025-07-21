@@ -9,8 +9,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { useQuery } from "@tanstack/react-query";
-import { fetchMonsters } from "./actions";
+import { useFetchMonsters } from "./actions";
 import { columns } from "./columns";
 import { LoaderPinwheelIcon } from "lucide-react";
 import { usePathname, useRouter } from "next/navigation";
@@ -20,10 +19,8 @@ export default function DataTable() {
   const pathname = usePathname();
   const router = useRouter();
 
-  const { data, isLoading } = useQuery({
-    queryKey: ["monsters"],
-    queryFn: () => fetchMonsters(),
-  });
+  const data = useFetchMonsters();
+  const isLoading = data === undefined;
 
   const table = useReactTable({
     data: data ?? [],

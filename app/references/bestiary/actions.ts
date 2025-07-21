@@ -1,43 +1,27 @@
-import { firebaseDB } from "@/utils/firebase/client";
-import { collection, doc, getDoc, getDocs, orderBy, query } from "firebase/firestore";
+"use client";
+
+import { useQuery } from "convex/react";
+import { api } from "@/convex/_generated/api";
 import { Monster, MonsterBase } from "./type";
+import { Id } from "@/convex/_generated/dataModel";
 
-export const fetchMonsters = async () => {
-  try {
-    const collectionRef = collection(firebaseDB, "monsters");
-    const q = query(collectionRef, orderBy("name", "asc"));
-
-    const results = await getDocs(q);
-
-    return results.docs.map<MonsterBase>((doc) => {
-      const { type, subtype, name, id, size, hitPoints } = doc.data() as Monster;
-
-      return {
-        type,
-        subtype,
-        name,
-        id,
-        size,
-        hitPoints,
-      };
-    });
-  } catch (error) {
-    console.error("Error fetching monsters:", error);
-    throw error;
-  }
+export const useFetchMonsters = () => {
+  return useQuery(api.monsters.getMonsters);
 };
 
-export const fetchMonster = async (id: string | null) => {
-  try {
-    if (!id) return;
+export const useFetchMonster = (id: Id<"monsters"> | null) => {
+  return useQuery(api.monsters.getMonster, id ? { id } : "skip");
+};
 
-    const docRef = doc(firebaseDB, "monsters", id);
+// Server action alternatives for use in server components
+export const fetchMonsters = async (): Promise<MonsterBase[]> => {
+  // This would need to be implemented with server-side Convex client
+  // For now, we'll rely on client-side hooks
+  throw new Error("Use useFetchMonsters hook in client components");
+};
 
-    const docSnap = await getDoc(docRef);
-
-    return docSnap.data() as Monster;
-  } catch (error) {
-    console.error("Error fetching monster:", error);
-    throw error;
-  }
+export const fetchMonster = async (id: string | null): Promise<Monster | undefined> => {
+  // This would need to be implemented with server-side Convex client
+  // For now, we'll rely on client-side hooks
+  throw new Error("Use useFetchMonster hook in client components");
 };

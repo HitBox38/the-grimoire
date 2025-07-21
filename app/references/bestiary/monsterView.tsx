@@ -1,7 +1,7 @@
 "use client";
 
-import { useQuery } from "@tanstack/react-query";
-import { fetchMonster } from "./actions";
+import { useFetchMonster } from "./actions";
+import { Id } from "@/convex/_generated/dataModel";
 import { LoaderPinwheelIcon } from "lucide-react";
 import StatsTable from "@/components/StatsTable";
 import { ScrollArea } from "@/components/ui/scroll-area";
@@ -22,11 +22,8 @@ export default function MonsterView() {
   const params = useSearchParams();
   const monsterId = params.get("monsterId");
 
-  const { data, isFetching } = useQuery({
-    queryKey: monsterId ? ["monster", monsterId] : ["no-monster"],
-    queryFn: () => fetchMonster(monsterId),
-    enabled: !!monsterId,
-  });
+  const data = useFetchMonster(monsterId as Id<"monsters"> | null);
+  const isFetching = data === undefined && monsterId !== null;
 
   return (
     <div className="h-full flex flex-col">

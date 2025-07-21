@@ -1,8 +1,10 @@
+import { Id } from "@/convex/_generated/dataModel";
+
 export interface MonsterBase {
   type: string;
   subtype?: string;
   name: string;
-  id: string;
+  id: Id<"monsters">;
   size: string;
   hitPoints: number;
 }
