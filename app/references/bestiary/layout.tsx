@@ -13,8 +13,12 @@ export const metadata: Metadata = {
 
 export default async function BestiaryLayout({ children }: Props) {
   return (
-    <div className="w-full flex flex-col items-center justify-center gap-4 h-screen overflow-hidden">
-      <Suspense fallback={<LoaderPinwheelIcon className="animate-spin" />}>{children}</Suspense>
-    </div>
+    <Suspense fallback={
+      <div className="w-full h-screen flex items-center justify-center">
+        <LoaderPinwheelIcon className="animate-spin" />
+      </div>
+    }>
+      {children}
+    </Suspense>
   );
 }
