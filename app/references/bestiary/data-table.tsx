@@ -41,7 +41,7 @@ export default function DataTable() {
     <div className="h-full flex flex-col">
       <ScrollArea className="flex-1 rounded-md border">
         <Table>
-          <TableHeader>
+          <TableHeader className="sticky top-0 bg-background z-10">
             {table.getHeaderGroups().map((headerGroup) => (
               <TableRow key={headerGroup.id}>
                 {headerGroup.headers.map((header) => (
