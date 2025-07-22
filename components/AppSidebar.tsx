@@ -6,7 +6,6 @@ import { usePathname } from "next/navigation"
 import { 
   Calendar, 
   Home, 
-  Inbox, 
   Search, 
   Settings, 
   LogOut, 
@@ -32,7 +31,7 @@ import {
   SidebarMenuItem,
   SidebarSeparator,
 } from "@/components/ui/sidebar"
-import { Button } from "@/components/ui/button"
+
 import { useThemeStore } from "@/lib/stores/useThemeStore"
 import { useHistoryStore } from "@/lib/stores/useHistoryStore"
 
