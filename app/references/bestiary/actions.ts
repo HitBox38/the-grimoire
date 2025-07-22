@@ -20,7 +20,7 @@ export const fetchMonsters = async (): Promise<MonsterBase[]> => {
   throw new Error("Use useFetchMonsters hook in client components");
 };
 
-export const fetchMonster = async (_id: string | null): Promise<Monster | undefined> => {
+export const fetchMonster = async (): Promise<Monster | undefined> => {
   // This would need to be implemented with server-side Convex client
   // For now, we'll rely on client-side hooks
   throw new Error("Use useFetchMonster hook in client components");
