@@ -70,13 +70,13 @@ export function BreadcrumbNavigation({
               <div className="absolute top-full left-0 w-full h-1 group-hover:block hidden"></div>
               
               {/* Hover dropdown */}
-              <div className="absolute top-full left-0 mt-1 w-56 bg-popover border border-border rounded-md shadow-md opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-[9999]">
-                <div className="p-1">
+              <div className="absolute top-full left-0 mt-1 w-56 bg-background border border-border rounded-md shadow-xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-[9999]">
+                <div className="p-1 bg-background">
                   {item.dropdownOptions.map((option, optionIndex) => (
                     <Link 
                       key={optionIndex} 
                       href={option.href} 
-                      className="flex flex-col items-start p-2 rounded-sm hover:bg-accent hover:text-accent-foreground transition-colors"
+                      className="flex flex-col items-start p-2 rounded-sm hover:bg-accent hover:text-accent-foreground transition-colors block"
                     >
                       <span className="font-medium">{option.label}</span>
                       {option.description && (
@@ -165,13 +165,13 @@ export function BreadcrumbNavigation({
               <div className="absolute top-full left-0 w-full h-1 group-hover:block hidden"></div>
               
               {/* Hover dropdown */}
-              <div className="absolute top-full left-0 mt-1 w-56 bg-popover border border-border rounded-md shadow-md opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-[9999]">
-                <div className="p-1">
+              <div className="absolute top-full left-0 mt-1 w-56 bg-background border border-border rounded-md shadow-xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-[9999]">
+                <div className="p-1 bg-background">
                   {firstItem.dropdownOptions.map((option, optionIndex) => (
                     <Link 
                       key={optionIndex} 
                       href={option.href} 
-                      className="flex flex-col items-start p-2 rounded-sm hover:bg-accent hover:text-accent-foreground transition-colors"
+                      className="flex flex-col items-start p-2 rounded-sm hover:bg-accent hover:text-accent-foreground transition-colors block"
                     >
                       <span className="font-medium">{option.label}</span>
                       {option.description && (
