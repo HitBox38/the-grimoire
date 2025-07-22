@@ -24,7 +24,7 @@ export function PageHeader({
         "border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60",
         className
       )}>
-      <div className="container mx-auto px-4 py-6">
+      <div className="container px-4 py-6">
         {/* Breadcrumb Navigation */}
         <div className="mb-4">
           <BreadcrumbNavigation items={breadcrumbItems} maxDisplayItems={4} className="text-sm" />
