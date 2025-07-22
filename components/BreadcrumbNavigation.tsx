@@ -66,8 +66,11 @@ export function BreadcrumbNavigation({
                 <ChevronDown className="h-3 w-3" />
               </Link>
               
+              {/* Invisible bridge to prevent dropdown closing */}
+              <div className="absolute top-full left-0 w-full h-1 group-hover:block hidden"></div>
+              
               {/* Hover dropdown */}
-              <div className="absolute top-full left-0 mt-1 w-56 bg-popover border border-border rounded-md shadow-md opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50">
+              <div className="absolute top-full left-0 mt-1 w-56 bg-popover border border-border rounded-md shadow-md opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-[9999]">
                 <div className="p-1">
                   {item.dropdownOptions.map((option, optionIndex) => (
                     <Link 
@@ -158,8 +161,11 @@ export function BreadcrumbNavigation({
                 <ChevronDown className="h-3 w-3" />
               </Link>
               
+              {/* Invisible bridge to prevent dropdown closing */}
+              <div className="absolute top-full left-0 w-full h-1 group-hover:block hidden"></div>
+              
               {/* Hover dropdown */}
-              <div className="absolute top-full left-0 mt-1 w-56 bg-popover border border-border rounded-md shadow-md opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50">
+              <div className="absolute top-full left-0 mt-1 w-56 bg-popover border border-border rounded-md shadow-md opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-[9999]">
                 <div className="p-1">
                   {firstItem.dropdownOptions.map((option, optionIndex) => (
                     <Link 
