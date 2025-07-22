@@ -57,26 +57,33 @@ export function BreadcrumbNavigation({
           {item.isCurrentPage || isLast ? (
             <BreadcrumbPage>{item.label}</BreadcrumbPage>
           ) : item.dropdownOptions && item.dropdownOptions.length > 0 ? (
-            <DropdownMenu>
-              <DropdownMenuTrigger className="flex items-center gap-1 hover:text-foreground transition-colors">
-                <Link href={item.href || "#"} className="hover:no-underline">
-                  {item.label}
-                </Link>
+            <div className="group relative inline-flex items-center">
+              <Link 
+                href={item.href || "#"} 
+                className="flex items-center gap-1 hover:text-foreground transition-colors hover:no-underline"
+              >
+                {item.label}
                 <ChevronDown className="h-3 w-3" />
-              </DropdownMenuTrigger>
-              <DropdownMenuContent align="start" className="w-56">
-                {item.dropdownOptions.map((option, optionIndex) => (
-                  <DropdownMenuItem key={optionIndex} asChild>
-                    <Link href={option.href} className="flex flex-col items-start">
+              </Link>
+              
+              {/* Hover dropdown */}
+              <div className="absolute top-full left-0 mt-1 w-56 bg-popover border border-border rounded-md shadow-md opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50">
+                <div className="p-1">
+                  {item.dropdownOptions.map((option, optionIndex) => (
+                    <Link 
+                      key={optionIndex} 
+                      href={option.href} 
+                      className="flex flex-col items-start p-2 rounded-sm hover:bg-accent hover:text-accent-foreground transition-colors"
+                    >
                       <span className="font-medium">{option.label}</span>
                       {option.description && (
                         <span className="text-xs text-muted-foreground">{option.description}</span>
                       )}
                     </Link>
-                  </DropdownMenuItem>
-                ))}
-              </DropdownMenuContent>
-            </DropdownMenu>
+                  ))}
+                </div>
+              </div>
+            </div>
           ) : (
             <BreadcrumbLink asChild>
               <Link href={item.href || "#"}>{item.label}</Link>
@@ -142,26 +149,33 @@ export function BreadcrumbNavigation({
         {/* First item */}
         <BreadcrumbItem>
           {firstItem.dropdownOptions && firstItem.dropdownOptions.length > 0 ? (
-            <DropdownMenu>
-              <DropdownMenuTrigger className="flex items-center gap-1 hover:text-foreground transition-colors">
-                <Link href={firstItem.href || "#"} className="hover:no-underline">
-                  {firstItem.label}
-                </Link>
+            <div className="group relative inline-flex items-center">
+              <Link 
+                href={firstItem.href || "#"} 
+                className="flex items-center gap-1 hover:text-foreground transition-colors hover:no-underline"
+              >
+                {firstItem.label}
                 <ChevronDown className="h-3 w-3" />
-              </DropdownMenuTrigger>
-              <DropdownMenuContent align="start" className="w-56">
-                {firstItem.dropdownOptions.map((option, optionIndex) => (
-                  <DropdownMenuItem key={optionIndex} asChild>
-                    <Link href={option.href} className="flex flex-col items-start">
+              </Link>
+              
+              {/* Hover dropdown */}
+              <div className="absolute top-full left-0 mt-1 w-56 bg-popover border border-border rounded-md shadow-md opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50">
+                <div className="p-1">
+                  {firstItem.dropdownOptions.map((option, optionIndex) => (
+                    <Link 
+                      key={optionIndex} 
+                      href={option.href} 
+                      className="flex flex-col items-start p-2 rounded-sm hover:bg-accent hover:text-accent-foreground transition-colors"
+                    >
                       <span className="font-medium">{option.label}</span>
                       {option.description && (
                         <span className="text-xs text-muted-foreground">{option.description}</span>
                       )}
                     </Link>
-                  </DropdownMenuItem>
-                ))}
-              </DropdownMenuContent>
-            </DropdownMenu>
+                  ))}
+                </div>
+              </div>
+            </div>
           ) : (
             <BreadcrumbLink asChild>
               <Link href={firstItem.href || "#"}>{firstItem.label}</Link>
