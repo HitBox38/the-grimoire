@@ -53,6 +53,7 @@ const SidebarProvider = React.forwardRef<
 >(({ defaultOpen = false, open: openProp, onOpenChange: setOpenProp, className, style, children, ...props }, ref) => {
   const [openMobile, setOpenMobile] = React.useState(false)
   const [isHovered, setIsHovered] = React.useState(false)
+  const [isMobile, setIsMobile] = React.useState(false)
   const hoverTimeoutRef = React.useRef<NodeJS.Timeout | null>(null)
 
   // This is the internal state of the sidebar.
@@ -130,6 +131,18 @@ const SidebarProvider = React.forwardRef<
     return () => window.removeEventListener("keydown", handleKeyDown)
   }, [toggleSidebar])
 
+  // Mobile detection
+  React.useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 1024) // lg breakpoint
+    }
+    
+    checkMobile()
+    window.addEventListener('resize', checkMobile)
+    
+    return () => window.removeEventListener('resize', checkMobile)
+  }, [])
+
   // Cleanup timeout on unmount
   React.useEffect(() => {
     return () => {
@@ -148,7 +161,7 @@ const SidebarProvider = React.forwardRef<
       state,
       open,
       setOpen,
-      isMobile: false, // We'll implement mobile detection if needed
+      isMobile,
       openMobile,
       setOpenMobile,
       toggleSidebar,
@@ -156,7 +169,7 @@ const SidebarProvider = React.forwardRef<
       handleMouseEnter,
       handleMouseLeave,
     }),
-    [state, open, setOpen, openMobile, setOpenMobile, toggleSidebar, isHovered, handleMouseEnter, handleMouseLeave]
+    [state, open, setOpen, isMobile, openMobile, setOpenMobile, toggleSidebar, isHovered, handleMouseEnter, handleMouseLeave]
   )
 
   return (
@@ -290,7 +303,7 @@ const SidebarTrigger = React.forwardRef<
   React.ElementRef<typeof Button>,
   React.ComponentProps<typeof Button>
 >(({ className, onClick, ...props }, ref) => {
-  const { toggleSidebar } = useSidebar()
+  const { toggleSidebar, isMobile, setOpenMobile } = useSidebar()
 
   return (
     <Button
@@ -301,7 +314,11 @@ const SidebarTrigger = React.forwardRef<
       className={cn("h-7 w-7", className)}
       onClick={(event) => {
         onClick?.(event)
-        toggleSidebar()
+        if (isMobile) {
+          setOpenMobile(true)
+        } else {
+          toggleSidebar()
+        }
       }}
       {...props}
     >

@@ -19,6 +19,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
+import { SidebarTrigger } from "@/components/ui/sidebar"
 
 export interface BreadcrumbItem {
   label: string
@@ -134,9 +135,12 @@ export function BreadcrumbNavigation({
   }
 
   return (
-    <Breadcrumb className={className}>
-      <BreadcrumbList>{renderBreadcrumbs()}</BreadcrumbList>
-    </Breadcrumb>
+    <div className="flex items-center gap-2">
+      <SidebarTrigger />
+      <Breadcrumb className={className}>
+        <BreadcrumbList>{renderBreadcrumbs()}</BreadcrumbList>
+      </Breadcrumb>
+    </div>
   )
 }
 
