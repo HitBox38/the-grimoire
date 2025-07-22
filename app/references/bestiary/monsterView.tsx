@@ -1,5 +1,6 @@
 "use client";
 
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { useFetchMonster } from "./actions";
 import { Id } from "@/convex/_generated/dataModel";
 import { LoaderPinwheelIcon } from "lucide-react";
@@ -57,7 +58,7 @@ export default function MonsterView() {
                       <div className="flex flex-row justify-between">
                         <p className="leading-7">
                           <b>Armor Class: </b>
-                          {data.armorClass.map((ac, index) => (
+                          {data.armorClass.map((ac: any, index: number) => (
                             <span key={ac.type}>
                               {ac.value} ({ac.type})
                               {index !== data?.armorClass.length - 1 ? ", " : ""}
@@ -78,7 +79,7 @@ export default function MonsterView() {
                         {Object.entries(data.speed).map(([key, value], index) => (
                           <span key={key}>
                             <span className="capitalize">{key !== "walk" ? `${key}: ` : null}</span>
-                            {value}
+                            {String(value)}
                             {index !== Object.entries(data.speed).length - 1 ? ", " : null}
                           </span>
                         ))}
@@ -89,8 +90,8 @@ export default function MonsterView() {
                         stats={data.stats}
                         proficiencyBonus={data.proficiencyBonus}
                         savingThrowProficiencies={data.proficiencies
-                          .filter((p) => p.proficiency.name.includes("Saving Throw"))
-                          .map((p) =>
+                          .filter((p: any) => p.proficiency.name.includes("Saving Throw"))
+                          .map((p: any) =>
                             p.proficiency.name.substring(p.proficiency.name.indexOf(": ") + 2)
                           )}
                       />
@@ -98,7 +99,7 @@ export default function MonsterView() {
                     <section>
                       <p>
                         <b>Skills:</b>
-                        {data.proficiencies.map((p, index) => {
+                        {data.proficiencies.map((p: any, index: number) => {
                           return p.proficiency.name.includes("Skill") ? (
                             <span key={p.proficiency.name}>
                               {p.proficiency.name.substring(p.proficiency.name.indexOf(" "))}{" "}
@@ -139,7 +140,7 @@ export default function MonsterView() {
                             </h3>
                           </AccordionTrigger>
                           <AccordionContent>
-                            {data.specialAbilities?.map((sa, index) => (
+                            {data.specialAbilities?.map((sa: any, index: number) => (
                               <div key={index}>
                                 <h4 className="scroll-m-20 text-xl font-semibold tracking-tight">
                                   {sa.name}
@@ -158,7 +159,7 @@ export default function MonsterView() {
                             </h3>
                           </AccordionTrigger>
                           <AccordionContent>
-                            {data.actions?.map((a, index) => (
+                            {data.actions?.map((a: any, index: number) => (
                               <div key={index}>
                                 <div className="flex flex-row gap-2">
                                   <b className="text-xl">{a.name}</b>
@@ -182,7 +183,7 @@ export default function MonsterView() {
                             </h3>
                           </AccordionTrigger>
                           <AccordionContent>
-                            {data.reactions?.map((r, index) => (
+                            {data.reactions?.map((r: any, index: number) => (
                               <div key={index}>
                                 <b className="text-xl">{r.name}</b>
                                 <p className="leading-7 pl-4">{r.desc}</p>
@@ -199,7 +200,7 @@ export default function MonsterView() {
                             </h3>
                           </AccordionTrigger>
                           <AccordionContent>
-                            {data.legendaryActions?.map((a, index) => (
+                            {data.legendaryActions?.map((a: any, index: number) => (
                               <div key={index}>
                                 <b className="text-xl">{a.name}</b>
                                 <p className="leading-7 pl-4">{a.desc}</p>

@@ -88,7 +88,7 @@ export const getSpellsByClass = query({
   handler: async (ctx, args) => {
     const spells = await ctx.db
       .query("spells")
-      .withIndex("by_class", (q) => q.eq("classes", args.className))
+      .filter((q) => q.eq(q.field("classes"), [args.className]))
       .order("asc")
       .collect();
 

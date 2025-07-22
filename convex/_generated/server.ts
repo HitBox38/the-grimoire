@@ -12,7 +12,6 @@ import {
   ActionBuilder,
   MutationBuilder,
   QueryBuilder,
-  SchemaType,
   TableNamesInDataModel,
   internalActionGeneric,
   internalMutationGeneric,
