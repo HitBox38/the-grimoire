@@ -27,6 +27,9 @@ type SidebarContext = {
   setOpenMobile: (open: boolean) => void
   isMobile: boolean
   toggleSidebar: () => void
+  isHovered: boolean
+  handleMouseEnter: () => void
+  handleMouseLeave: () => void
 }
 
 const SidebarContext = React.createContext<SidebarContext | null>(null)
@@ -47,16 +50,21 @@ const SidebarProvider = React.forwardRef<
     open?: boolean
     onOpenChange?: (open: boolean) => void
   }
->(({ defaultOpen = true, open: openProp, onOpenChange: setOpenProp, className, style, children, ...props }, ref) => {
+>(({ defaultOpen = false, open: openProp, onOpenChange: setOpenProp, className, style, children, ...props }, ref) => {
   const [openMobile, setOpenMobile] = React.useState(false)
+  const [isHovered, setIsHovered] = React.useState(false)
+  const hoverTimeoutRef = React.useRef<NodeJS.Timeout | null>(null)
 
   // This is the internal state of the sidebar.
   // We use openProp and setOpenProp for control from outside the component.
   const [_open, _setOpen] = React.useState(defaultOpen)
+  const [userPreference, setUserPreference] = React.useState(defaultOpen) // Track user's explicit preference
+  
   const open = openProp ?? _open
   const setOpen = React.useCallback(
     (value: boolean | ((value: boolean) => boolean)) => {
       const openState = typeof value === "function" ? value(open) : value
+      setUserPreference(openState) // Store user preference
       if (setOpenProp) {
         setOpenProp(openState)
       } else {
@@ -74,6 +82,41 @@ const SidebarProvider = React.forwardRef<
     return setOpen((open) => !open)
   }, [setOpen])
 
+  // Hover handlers for auto expand/collapse
+  const handleMouseEnter = React.useCallback(() => {
+    // Clear any pending collapse timeout
+    if (hoverTimeoutRef.current) {
+      clearTimeout(hoverTimeoutRef.current)
+      hoverTimeoutRef.current = null
+    }
+    
+    setIsHovered(true)
+    if (!userPreference) {
+      // Only auto-expand if user preference is collapsed
+      if (setOpenProp) {
+        setOpenProp(true)
+      } else {
+        _setOpen(true)
+      }
+    }
+  }, [userPreference, setOpenProp, _setOpen])
+
+  const handleMouseLeave = React.useCallback(() => {
+    setIsHovered(false)
+    
+    if (!userPreference) {
+      // Add a small delay before collapsing to prevent flickering
+      hoverTimeoutRef.current = setTimeout(() => {
+        // Only auto-collapse if user preference is collapsed
+        if (setOpenProp) {
+          setOpenProp(false)
+        } else {
+          _setOpen(false)
+        }
+      }, 300)
+    }
+  }, [userPreference, setOpenProp, _setOpen])
+
   // Adds a keyboard shortcut to toggle the sidebar.
   React.useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
@@ -86,6 +129,15 @@ const SidebarProvider = React.forwardRef<
     window.addEventListener("keydown", handleKeyDown)
     return () => window.removeEventListener("keydown", handleKeyDown)
   }, [toggleSidebar])
+
+  // Cleanup timeout on unmount
+  React.useEffect(() => {
+    return () => {
+      if (hoverTimeoutRef.current) {
+        clearTimeout(hoverTimeoutRef.current)
+      }
+    }
+  }, [])
 
   // We add a state so that we can do data-state="expanded" or "collapsed".
   // This makes it easier to style the sidebar with Tailwind classes.
@@ -100,8 +152,11 @@ const SidebarProvider = React.forwardRef<
       openMobile,
       setOpenMobile,
       toggleSidebar,
+      isHovered,
+      handleMouseEnter,
+      handleMouseLeave,
     }),
-    [state, open, setOpen, openMobile, setOpenMobile, toggleSidebar]
+    [state, open, setOpen, openMobile, setOpenMobile, toggleSidebar, isHovered, handleMouseEnter, handleMouseLeave]
   )
 
   return (
@@ -137,7 +192,7 @@ const Sidebar = React.forwardRef<
     collapsible?: "offcanvas" | "icon" | "none"
   }
 >(({ variant = "sidebar", collapsible = "offcanvas", className, children, ...props }, ref) => {
-  const { isMobile, state, openMobile, setOpenMobile } = useSidebar()
+  const { isMobile, state, openMobile, setOpenMobile, handleMouseEnter, handleMouseLeave } = useSidebar()
 
   if (collapsible === "none") {
     return (
@@ -181,6 +236,8 @@ const Sidebar = React.forwardRef<
       data-collapsible={state === "collapsed" ? collapsible : ""}
       data-variant={variant}
       data-side="left"
+      onMouseEnter={handleMouseEnter}
+      onMouseLeave={handleMouseLeave}
     >
       {/* This is what handles the sidebar gap on desktop */}
       <div
@@ -193,21 +250,30 @@ const Sidebar = React.forwardRef<
             : "group-data-[collapsible=icon]:w-[--sidebar-width-icon]"
         )}
       />
-      <div
-        className={cn(
-          "duration-200 fixed inset-y-0 z-10 hidden h-svh w-[--sidebar-width] transition-[left,right,width] ease-linear lg:flex",
-          "left-0 group-data-[side=right]:left-auto group-data-[side=right]:right-0",
-          // Adjust the padding for floating and inset variants.
-          "group-data-[variant=floating]:p-2",
-          "group-data-[variant=inset]:p-2",
-          "group-data-[collapsible=offcanvas]:left-[calc(var(--sidebar-width)*-1)]",
-          "group-data-[collapsible=offcanvas]:group-data-[side=right]:right-[calc(var(--sidebar-width)*-1)]",
-          // Adjust the padding for the collapsed state.
-          "group-data-[collapsible=icon]:w-[--sidebar-width-icon] group-data-[collapsible=icon]:group-data-[variant=floating]:p-2",
-          className
-        )}
-        {...props}
-      >
+      
+      {/* Hover trigger area when sidebar is collapsed */}
+      {state === "collapsed" && (
+        <div
+          className="fixed left-0 top-0 h-full w-8 z-40 bg-transparent hover:bg-sidebar/10 transition-colors duration-200"
+          onMouseEnter={handleMouseEnter}
+          title="Hover to expand sidebar"
+        />
+      )}
+              <div
+          className={cn(
+            "duration-300 fixed inset-y-0 z-10 hidden h-svh w-[--sidebar-width] transition-[left,right,width] ease-in-out lg:flex",
+            "left-0 group-data-[side=right]:left-auto group-data-[side=right]:right-0",
+            // Adjust the padding for floating and inset variants.
+            "group-data-[variant=floating]:p-2",
+            "group-data-[variant=inset]:p-2",
+            "group-data-[collapsible=offcanvas]:left-[calc(var(--sidebar-width)*-1)]",
+            "group-data-[collapsible=offcanvas]:group-data-[side=right]:right-[calc(var(--sidebar-width)*-1)]",
+            // Adjust the padding for the collapsed state.
+            "group-data-[collapsible=icon]:w-[--sidebar-width-icon] group-data-[collapsible=icon]:group-data-[variant=floating]:p-2",
+            className
+          )}
+          {...props}
+        >
         <div
           data-sidebar="sidebar"
           className="flex h-full w-full flex-col bg-sidebar group-data-[variant=floating]:rounded-lg group-data-[variant=floating]:border group-data-[variant=floating]:border-sidebar-border group-data-[variant=floating]:shadow"
