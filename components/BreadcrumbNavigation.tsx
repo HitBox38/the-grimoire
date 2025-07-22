@@ -20,10 +20,17 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 
+export interface BreadcrumbDropdownOption {
+  label: string
+  href: string
+  description?: string
+}
+
 export interface BreadcrumbItem {
   label: string
   href?: string
   isCurrentPage?: boolean
+  dropdownOptions?: BreadcrumbDropdownOption[]
 }
 
 interface BreadcrumbNavigationProps {
@@ -49,6 +56,27 @@ export function BreadcrumbNavigation({
         <BreadcrumbItem>
           {item.isCurrentPage || isLast ? (
             <BreadcrumbPage>{item.label}</BreadcrumbPage>
+          ) : item.dropdownOptions && item.dropdownOptions.length > 0 ? (
+            <DropdownMenu>
+              <DropdownMenuTrigger className="flex items-center gap-1 hover:text-foreground transition-colors">
+                <Link href={item.href || "#"} className="hover:no-underline">
+                  {item.label}
+                </Link>
+                <ChevronDown className="h-3 w-3" />
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="start" className="w-56">
+                {item.dropdownOptions.map((option, optionIndex) => (
+                  <DropdownMenuItem key={optionIndex} asChild>
+                    <Link href={option.href} className="flex flex-col items-start">
+                      <span className="font-medium">{option.label}</span>
+                      {option.description && (
+                        <span className="text-xs text-muted-foreground">{option.description}</span>
+                      )}
+                    </Link>
+                  </DropdownMenuItem>
+                ))}
+              </DropdownMenuContent>
+            </DropdownMenu>
           ) : (
             <BreadcrumbLink asChild>
               <Link href={item.href || "#"}>{item.label}</Link>
@@ -113,9 +141,32 @@ export function BreadcrumbNavigation({
       <>
         {/* First item */}
         <BreadcrumbItem>
-          <BreadcrumbLink asChild>
-            <Link href={firstItem.href || "#"}>{firstItem.label}</Link>
-          </BreadcrumbLink>
+          {firstItem.dropdownOptions && firstItem.dropdownOptions.length > 0 ? (
+            <DropdownMenu>
+              <DropdownMenuTrigger className="flex items-center gap-1 hover:text-foreground transition-colors">
+                <Link href={firstItem.href || "#"} className="hover:no-underline">
+                  {firstItem.label}
+                </Link>
+                <ChevronDown className="h-3 w-3" />
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="start" className="w-56">
+                {firstItem.dropdownOptions.map((option, optionIndex) => (
+                  <DropdownMenuItem key={optionIndex} asChild>
+                    <Link href={option.href} className="flex flex-col items-start">
+                      <span className="font-medium">{option.label}</span>
+                      {option.description && (
+                        <span className="text-xs text-muted-foreground">{option.description}</span>
+                      )}
+                    </Link>
+                  </DropdownMenuItem>
+                ))}
+              </DropdownMenuContent>
+            </DropdownMenu>
+          ) : (
+            <BreadcrumbLink asChild>
+              <Link href={firstItem.href || "#"}>{firstItem.label}</Link>
+            </BreadcrumbLink>
+          )}
         </BreadcrumbItem>
         <BreadcrumbSeparator>
           <Slash />
