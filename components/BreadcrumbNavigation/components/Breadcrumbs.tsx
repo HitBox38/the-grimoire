@@ -66,7 +66,6 @@ export const Breadcrumbs = ({ items, maxDisplayItems, shouldShowEllipsis }: Prop
 
   // Handle edge case: if maxDisplayItems is 1, only show the last item
   if (maxDisplayItems === 1) {
-    const lastItem = items[items.length - 1];
     return <NavigationItem key={items.length - 1} items={items} index={items.length - 1} />;
   }
 
