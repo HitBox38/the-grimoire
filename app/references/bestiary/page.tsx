@@ -12,7 +12,15 @@ export default function Bestiary() {
   
   const breadcrumbItems = [
     { label: "Home", href: "/" },
-    { label: "References", href: "/references" },
+    { 
+      label: "References", 
+      href: "/references",
+      dropdownOptions: [
+        { label: "Bestiary", href: "/references/bestiary", description: "Browse monsters and creatures" },
+        { label: "Spells", href: "/references/spells", description: "Search magical spells and abilities" },
+        { label: "Items", href: "/references/items", description: "Discover magical items and equipment" }
+      ]
+    },
     { label: "Bestiary", isCurrentPage: true }
   ];
 
