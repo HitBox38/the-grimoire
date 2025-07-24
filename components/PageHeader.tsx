@@ -2,6 +2,9 @@ import { ReactNode } from "react";
 import { BreadcrumbNavigation } from "./BreadcrumbNavigation";
 import { BreadcrumbItem as BreadcrumbItemType } from "./BreadcrumbNavigation/types";
 import { cn } from "@/lib/utils";
+import { SignInButton } from "@clerk/nextjs";
+import { SignedIn, SignedOut, SignUpButton, UserButton } from "@clerk/nextjs";
+import { Button } from "./ui/button";
 
 interface PageHeaderProps {
   title?: string;
@@ -24,10 +27,25 @@ export function PageHeader({
         "border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60",
         className
       )}>
-      <div className="container px-4 py-6">
+      <div className="px-4 py-6">
         {/* Breadcrumb Navigation */}
-        <div className="mb-4">
+        <div className="mb-4 flex justify-between">
           <BreadcrumbNavigation items={breadcrumbItems} maxDisplayItems={4} className="text-sm" />
+          <div className="flex gap-2">
+            <SignedOut>
+              <div className="flex gap-2">
+                <SignInButton mode="modal">
+                  <Button>Sign In</Button>
+                </SignInButton>
+                <SignUpButton mode="modal">
+                  <Button>Sign Up</Button>
+                </SignUpButton>
+              </div>
+            </SignedOut>
+            <SignedIn>
+              <UserButton afterSignOutUrl="/" />
+            </SignedIn>
+          </div>
         </div>
 
         {/* Page Title and Description */}

@@ -5,6 +5,34 @@ import QueryProvider from "./providers/QueryProvider";
 import { SidebarProvider, SidebarInset } from "@/components/ui/sidebar";
 import { AppSidebar } from "@/components/AppSidebar";
 import { ThemeProvider } from "@/components/ThemeProvider";
+import {
+  ClerkProvider,
+  SignedIn,
+  SignedOut,
+  SignInButton,
+  SignUpButton,
+  UserButton,
+} from "@clerk/nextjs";
+import { shadcn } from "@clerk/themes";
+import { Button } from "@/components/ui/button";
+
+const clerkAppearance = {
+  variables: {
+    colorPrimary: "var(--primary)",
+    colorBackground: "var(--background)",
+    colorText: "var(--foreground)",
+    colorInputBackground: "var(--input)",
+    colorInputText: "var(--foreground)",
+    colorTextOnPrimaryBackground: "var(--primary-foreground)",
+    colorDanger: "var(--destructive)",
+  },
+  elements: {
+    card: "bg-card text-card-foreground shadow rounded-lg",
+    button: "bg-primary text-primary-foreground hover:opacity-90",
+    input:
+      "bg-input text-foreground placeholder:text-muted-foreground border border-border focus:border-ring focus:ring-ring",
+  },
+} as const;
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -28,21 +56,27 @@ export default async function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className="dark">
-      <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
-        <ThemeProvider>
-          <QueryProvider>
-            <SidebarProvider>
-              <AppSidebar />
-              <SidebarInset>
-                <div className="flex flex-1 flex-col gap-4 p-4">
-                  {children}
-                </div>
-              </SidebarInset>
-            </SidebarProvider>
-          </QueryProvider>
-        </ThemeProvider>
-      </body>
-    </html>
+    <ClerkProvider
+      appearance={{
+        baseTheme: shadcn,
+        cssLayerName: "clerk",
+        variables: clerkAppearance.variables,
+        elements: clerkAppearance.elements,
+      }}>
+      <html lang="en" className="dark">
+        <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
+          <ThemeProvider>
+            <QueryProvider>
+              <SidebarProvider>
+                <AppSidebar />
+                <SidebarInset>
+                  <div className="flex flex-1 flex-col gap-4">{children}</div>
+                </SidebarInset>
+              </SidebarProvider>
+            </QueryProvider>
+          </ThemeProvider>
+        </body>
+      </html>
+    </ClerkProvider>
   );
 }
