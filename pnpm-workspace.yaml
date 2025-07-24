@@ -1,2 +1,9 @@
+packages:
+  # include the root project
+  - "."
+  # or be more specific, e.g.
+  # - 'apps/**'
+  # - 'packages/**'
+
 onlyBuiltDependencies:
-  - '@clerk/shared'
+  - "@clerk/shared"
