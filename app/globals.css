@@ -1,5 +1,8 @@
 @import "tailwindcss";
 
+/* Define Tailwind layers so Clerk styles (`cssLayerName: 'clerk'`) slot in the correct order */
+@layer theme, base, clerk, components, utilities;
+
 @plugin 'tailwindcss-animate';
 
 @custom-variant dark (&:is(.dark *));
