@@ -15,6 +15,7 @@ import {
 } from "@clerk/nextjs";
 import { shadcn } from "@clerk/themes";
 import { Button } from "@/components/ui/button";
+import { ConvexClientProvider } from "./providers/ConvexClientProvider";
 
 const clerkAppearance = {
   variables: {
@@ -67,12 +68,14 @@ export default async function RootLayout({
         <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
           <ThemeProvider>
             <QueryProvider>
-              <SidebarProvider>
-                <AppSidebar />
-                <SidebarInset>
-                  <div className="flex flex-1 flex-col gap-4">{children}</div>
-                </SidebarInset>
-              </SidebarProvider>
+              <ConvexClientProvider>
+                <SidebarProvider>
+                  <AppSidebar />
+                  <SidebarInset>
+                    <div className="flex flex-1 flex-col gap-4">{children}</div>
+                  </SidebarInset>
+                </SidebarProvider>
+              </ConvexClientProvider>
             </QueryProvider>
           </ThemeProvider>
         </body>
