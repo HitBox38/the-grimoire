@@ -14,7 +14,6 @@ import { calculateStatModifier } from "@/lib/calculateStatModifier";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { TabsContent } from "@radix-ui/react-tabs";
 import { cn } from "@/lib/utils";
-import { Id } from "@/convex/_generated/dataModel";
 import { api } from "@/convex/_generated/api";
 import { useQuery } from "convex/react";
 import { LoaderPinwheelIcon } from "lucide-react";
@@ -23,13 +22,13 @@ export default function MonsterView() {
   const params = useSearchParams();
   const monsterId = params.get("monsterId");
 
-  const monster = useQuery(api.monsters.getById, {
-    id: monsterId as Id<"monsters">,
-  });
+  const monster = useQuery(api.monsters.getById, monsterId ? { id: monsterId } : "skip");
+
+  const isLoading = !!monsterId && monster === undefined;
 
   return (
     <div className="h-full flex flex-col">
-      {monster === undefined ? (
+      {isLoading ? (
         <div className="h-full flex items-center justify-center">
           <LoaderPinwheelIcon className="animate-spin" />
         </div>
