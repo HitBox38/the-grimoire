@@ -9,6 +9,8 @@ export const fetchMonsters = async () => {
 
     const results = await getDocs(q);
 
+    console.log(results.docs.map((doc) => doc.data()));
+
     return results.docs.map<MonsterBase>((doc) => {
       const { type, subtype, name, id, size, hitPoints } = doc.data() as Monster;
 

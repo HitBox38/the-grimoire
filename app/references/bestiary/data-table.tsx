@@ -9,24 +9,21 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { useQuery } from "@tanstack/react-query";
-import { fetchMonsters } from "./actions";
+import { useQuery } from "convex/react";
 import { columns } from "./columns";
 import { LoaderPinwheelIcon } from "lucide-react";
 import { usePathname, useRouter } from "next/navigation";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import { api } from "@/convex/_generated/api";
 
 export default function DataTable() {
   const pathname = usePathname();
   const router = useRouter();
 
-  const { data, isLoading } = useQuery({
-    queryKey: ["monsters"],
-    queryFn: () => fetchMonsters(),
-  });
+  const monsters = useQuery(api.monsters.get);
 
   const table = useReactTable({
-    data: data ?? [],
+    data: monsters ?? [],
     columns,
     getCoreRowModel: getCoreRowModel(),
   });
@@ -37,7 +34,7 @@ export default function DataTable() {
     router.replace(`${pathname}?${params.toString()}`);
   };
 
-  return !isLoading ? (
+  return monsters !== undefined ? (
     <div className="h-full flex flex-col">
       <ScrollArea className="flex-1 rounded-md border">
         <Table>
