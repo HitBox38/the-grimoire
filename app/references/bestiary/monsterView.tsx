@@ -17,6 +17,7 @@ import { cn } from "@/lib/utils";
 import { Id } from "@/convex/_generated/dataModel";
 import { api } from "@/convex/_generated/api";
 import { useQuery } from "convex/react";
+import { LoaderPinwheelIcon } from "lucide-react";
 
 export default function MonsterView() {
   const params = useSearchParams();
@@ -28,7 +29,11 @@ export default function MonsterView() {
 
   return (
     <div className="h-full flex flex-col">
-      {monster ? (
+      {monster === undefined ? (
+        <div className="h-full flex items-center justify-center">
+          <LoaderPinwheelIcon className="animate-spin" />
+        </div>
+      ) : monster ? (
         <Card className="h-full flex flex-col">
           <CardHeader className="flex-shrink-0">
             <CardTitle className="scroll-m-20 border-b pb-2 text-3xl font-semibold tracking-tight first:mt-0">

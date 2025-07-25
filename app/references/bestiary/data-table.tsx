@@ -10,7 +10,6 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { useQuery } from "convex/react";
-import { fetchMonsters } from "./actions";
 import { columns } from "./columns";
 import { LoaderPinwheelIcon } from "lucide-react";
 import { usePathname, useRouter } from "next/navigation";
@@ -35,7 +34,7 @@ export default function DataTable() {
     router.replace(`${pathname}?${params.toString()}`);
   };
 
-  return monsters && monsters.length > 0 ? (
+  return monsters !== undefined ? (
     <div className="h-full flex flex-col">
       <ScrollArea className="flex-1 rounded-md border">
         <Table>
