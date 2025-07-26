@@ -7,17 +7,18 @@ interface Props {
 }
 
 export const metadata: Metadata = {
-  title: "Bestiary - The Grimoire",
+  title: "Bestiary - Chronicler's Desk",
   description: "A comprehensive bestiary library.",
 };
 
 export default async function BestiaryLayout({ children }: Props) {
   return (
-    <Suspense fallback={
-      <div className="w-full h-screen flex items-center justify-center">
-        <LoaderPinwheelIcon className="animate-spin" />
-      </div>
-    }>
+    <Suspense
+      fallback={
+        <div className="w-full h-screen flex items-center justify-center">
+          <LoaderPinwheelIcon className="animate-spin" />
+        </div>
+      }>
       {children}
     </Suspense>
   );

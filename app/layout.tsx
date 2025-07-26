@@ -47,7 +47,7 @@ const geistMono = localFont({
 });
 
 export const metadata: Metadata = {
-  title: "The Grimoire",
+  title: "Chronicler's Desk",
   description: "A comprehensive toolset for Dungeon Masters.",
 };
 
