@@ -17,7 +17,6 @@ import {
   Scroll,
   Users,
 } from "lucide-react";
-
 import {
   Sidebar,
   SidebarContent,
@@ -109,7 +108,7 @@ export function AppSidebar() {
       path: pathname,
       title: title,
     });
-  }, [pathname]);
+  }, [pathname, addToHistory]);
 
   return (
     <Sidebar>
