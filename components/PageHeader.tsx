@@ -43,7 +43,7 @@ export function PageHeader({
               </div>
             </SignedOut>
             <SignedIn>
-              <UserButton afterSignOutUrl="/" />
+              <UserButton />
             </SignedIn>
           </div>
         </div>

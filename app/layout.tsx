@@ -5,16 +5,8 @@ import QueryProvider from "./providers/QueryProvider";
 import { SidebarProvider, SidebarInset } from "@/components/ui/sidebar";
 import { AppSidebar } from "@/components/AppSidebar";
 import { ThemeProvider } from "@/components/ThemeProvider";
-import {
-  ClerkProvider,
-  SignedIn,
-  SignedOut,
-  SignInButton,
-  SignUpButton,
-  UserButton,
-} from "@clerk/nextjs";
+import { ClerkProvider } from "@clerk/nextjs";
 import { shadcn } from "@clerk/themes";
-import { Button } from "@/components/ui/button";
 import { ConvexClientProvider } from "./providers/ConvexClientProvider";
 
 const clerkAppearance = {
@@ -47,7 +39,7 @@ const geistMono = localFont({
 });
 
 export const metadata: Metadata = {
-  title: "The Grimoire",
+  title: "Chronicler's Desk",
   description: "A comprehensive toolset for Dungeon Masters.",
 };
 

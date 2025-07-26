@@ -1,23 +1,22 @@
-"use client"
+"use client";
 
-import * as React from "react"
-import Link from "next/link"
-import { usePathname } from "next/navigation"
-import { 
-  Calendar, 
-  Home, 
-  Search, 
-  Settings, 
-  LogOut, 
-  Sun, 
-  Moon, 
+import { useEffect } from "react";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
+import {
+  Calendar,
+  Home,
+  Search,
+  Settings,
+  LogOut,
+  Sun,
+  Moon,
   History,
   Sword,
   Shield,
   Scroll,
-  Users
-} from "lucide-react"
-
+  Users,
+} from "lucide-react";
 import {
   Sidebar,
   SidebarContent,
@@ -29,11 +28,11 @@ import {
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
-  SidebarSeparator,
-} from "@/components/ui/sidebar"
+} from "@/components/ui/sidebar";
 
-import { useThemeStore } from "@/lib/stores/useThemeStore"
-import { useHistoryStore } from "@/lib/stores/useHistoryStore"
+import { useThemeStore } from "@/lib/stores/useThemeStore";
+import { useHistoryStore } from "@/lib/stores/useHistoryStore";
+import { SignedIn, SignOutButton } from "@clerk/nextjs";
 
 // Menu items.
 const items = [
@@ -77,58 +76,49 @@ const items = [
     url: "/settings",
     icon: Settings,
   },
-]
+];
 
 export function AppSidebar() {
-  const pathname = usePathname()
-  const { theme, toggleTheme } = useThemeStore()
-  const { history, clearHistory } = useHistoryStore()
-  
+  const pathname = usePathname();
+  const { theme, toggleTheme } = useThemeStore();
+  const { history, addToHistory } = useHistoryStore();
+
   // Effect to track page visits
-  React.useEffect(() => {
-    const { addToHistory } = useHistoryStore.getState()
-    
+  useEffect(() => {
     // Get page title from current route
     const getPageTitle = (path: string) => {
-      const item = items.find(item => item.url === path)
-      if (item) return item.title
-      
+      const item = items.find((item) => item.url === path);
+      if (item) return item.title;
+
       // Handle dynamic routes
-      if (path.startsWith('/references/bestiary/')) {
-        return 'Monster Details'
+      if (path.startsWith("/references/bestiary/")) {
+        return "Monster Details";
       }
-      if (path.startsWith('/references/')) {
-        return 'References'
+      if (path.startsWith("/references/")) {
+        return "References";
       }
-      
-      return path === '/' ? 'Home' : path.split('/').pop() || 'Unknown'
-    }
-    
-    const title = getPageTitle(pathname)
-    
+
+      return path === "/" ? "Home" : path.split("/").pop() || "Unknown";
+    };
+
+    const title = getPageTitle(pathname);
+
     // Add current page to history
     addToHistory({
       path: pathname,
       title: title,
-    })
-  }, [pathname])
-
-  const handleLogout = () => {
-    // Clear any stored data if needed
-    clearHistory()
-    // Add your logout logic here (e.g., clear auth tokens, redirect)
-    console.log('Logout clicked')
-  }
+    });
+  }, [pathname, addToHistory]);
 
   return (
     <Sidebar>
       <SidebarHeader>
         <div className="flex items-center gap-2 px-2 py-2">
           <Scroll className="h-6 w-6" />
-          <span className="font-bold text-lg">The Grimoire</span>
+          <span className="font-bold text-lg">Chronicler&apos;s Desk</span>
         </div>
       </SidebarHeader>
-      
+
       <SidebarContent>
         <SidebarGroup>
           <SidebarGroupLabel>Navigation</SidebarGroupLabel>
@@ -136,10 +126,7 @@ export function AppSidebar() {
             <SidebarMenu>
               {items.map((item) => (
                 <SidebarMenuItem key={item.title}>
-                  <SidebarMenuButton 
-                    asChild
-                    isActive={pathname === item.url}
-                  >
+                  <SidebarMenuButton asChild isActive={pathname === item.url}>
                     <Link href={item.url}>
                       <item.icon />
                       <span>{item.title}</span>
@@ -153,7 +140,6 @@ export function AppSidebar() {
 
         {history.length > 0 && (
           <>
-            <SidebarSeparator />
             <SidebarGroup>
               <SidebarGroupLabel>Recent History</SidebarGroupLabel>
               <SidebarGroupContent>
@@ -174,28 +160,34 @@ export function AppSidebar() {
           </>
         )}
       </SidebarContent>
-      
+
       <SidebarFooter>
         <SidebarGroup>
           <SidebarGroupContent>
             <SidebarMenu>
               <SidebarMenuItem>
                 <SidebarMenuButton onClick={toggleTheme}>
-                  {theme === 'dark' ? <Sun /> : <Moon />}
-                  <span>{theme === 'dark' ? 'Light Mode' : 'Dark Mode'}</span>
+                  {theme === "dark" ? <Sun /> : <Moon />}
+                  <span>{theme === "dark" ? "Light Mode" : "Dark Mode"}</span>
                 </SidebarMenuButton>
               </SidebarMenuItem>
-              
-              <SidebarMenuItem>
-                <SidebarMenuButton onClick={handleLogout}>
-                  <LogOut />
-                  <span>Logout</span>
-                </SidebarMenuButton>
-              </SidebarMenuItem>
+
+              <SignedIn>
+                <SidebarMenuItem>
+                  <SidebarMenuButton asChild>
+                    <SignOutButton>
+                      <div className="flex items-center gap-2">
+                        <LogOut />
+                        <span>Logout</span>
+                      </div>
+                    </SignOutButton>
+                  </SidebarMenuButton>
+                </SidebarMenuItem>
+              </SignedIn>
             </SidebarMenu>
           </SidebarGroupContent>
         </SidebarGroup>
       </SidebarFooter>
     </Sidebar>
-  )
+  );
 }
