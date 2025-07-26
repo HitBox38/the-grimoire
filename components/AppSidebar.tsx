@@ -115,7 +115,7 @@ export function AppSidebar() {
       <SidebarHeader>
         <div className="flex items-center gap-2 px-2 py-2">
           <Scroll className="h-6 w-6" />
-          <span className="font-bold text-lg">Chroniclers Desk</span>
+          <span className="font-bold text-lg">Chronicler&apos;s Desk</span>
         </div>
       </SidebarHeader>
 
