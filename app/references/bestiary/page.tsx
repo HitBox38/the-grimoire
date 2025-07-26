@@ -9,19 +9,31 @@ import { useSearchParams } from "next/navigation";
 export default function Bestiary() {
   const searchParams = useSearchParams();
   const monsterId = searchParams.get("monsterId");
-  
+
   const breadcrumbItems = [
     { label: "Home", href: "/" },
-    { 
-      label: "References", 
+    {
+      label: "References",
       href: "/references",
       dropdownOptions: [
-        { label: "Bestiary", href: "/references/bestiary", description: "Browse monsters and creatures" },
-        { label: "Spells", href: "/references/spells", description: "Search magical spells and abilities" },
-        { label: "Items", href: "/references/items", description: "Discover magical items and equipment" }
-      ]
+        {
+          label: "Bestiary",
+          href: "/references/bestiary",
+          description: "Browse monsters and creatures",
+        },
+        {
+          label: "Spells",
+          href: "/references/spells",
+          description: "Search magical spells and abilities",
+        },
+        {
+          label: "Items",
+          href: "/references/items",
+          description: "Discover magical items and equipment",
+        },
+      ],
     },
-    { label: "Bestiary", isCurrentPage: true }
+    { label: "Bestiary", isCurrentPage: true },
   ];
 
   return (
@@ -34,7 +46,7 @@ export default function Bestiary() {
 
       {monsterId ? (
         // Two-panel layout when a monster is selected
-        <main className="container mx-auto px-4 py-6 h-[calc(100vh-200px)]">
+        <main className="mx-auto px-4 py-6 h-[calc(100vh-200px)]">
           <ResizablePanelGroup direction="horizontal" className="h-full">
             <ResizablePanel defaultSize={50} className="flex flex-col min-h-0">
               <div className="h-full overflow-hidden">
