@@ -3,7 +3,10 @@
 import StatsTable from "@/components/StatsTable";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { useSearchParams } from "next/navigation";
+import { useRouter, usePathname } from "next/navigation";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { X } from "lucide-react";
 import {
   Accordion,
   AccordionContent,
@@ -20,11 +23,19 @@ import { LoaderPinwheelIcon } from "lucide-react";
 
 export default function MonsterView() {
   const params = useSearchParams();
+  const router = useRouter();
+  const pathname = usePathname();
   const monsterId = params.get("monsterId");
 
   const monster = useQuery(api.monsters.getById, monsterId ? { id: monsterId } : "skip");
 
   const isLoading = !!monsterId && monster === undefined;
+
+  const handleClose = () => {
+    const newParams = new URLSearchParams(params);
+    newParams.delete("monsterId");
+    router.push(`${pathname}?${newParams.toString()}`);
+  };
 
   return (
     <div className="h-full flex flex-col">
@@ -35,9 +46,14 @@ export default function MonsterView() {
       ) : monster ? (
         <Card className="h-full flex flex-col">
           <CardHeader className="flex-shrink-0">
-            <CardTitle className="scroll-m-20 border-b pb-2 text-3xl font-semibold tracking-tight first:mt-0">
-              {monster.name}
-            </CardTitle>
+            <div className="flex justify-between items-center scroll-m-20 border-b pb-2">
+              <CardTitle className="text-3xl font-semibold tracking-tight first:mt-0">
+                {monster.name}
+              </CardTitle>
+              <Button variant="ghost" size="icon" onClick={handleClose}>
+                <X className="h-4 w-4" />
+              </Button>
+            </div>
           </CardHeader>
           <CardContent className="flex-1 min-h-0">
             <ScrollArea className="h-full">
