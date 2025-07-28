@@ -46,8 +46,8 @@ export default function MonsterView() {
       ) : monster ? (
         <Card className="h-full flex flex-col">
           <CardHeader className="flex-shrink-0">
-            <div className="flex justify-between items-center">
-              <CardTitle className="scroll-m-20 border-b pb-2 text-3xl font-semibold tracking-tight first:mt-0">
+            <div className="flex justify-between items-center scroll-m-20 border-b pb-2">
+              <CardTitle className="text-3xl font-semibold tracking-tight first:mt-0">
                 {monster.name}
               </CardTitle>
               <Button variant="ghost" size="icon" onClick={handleClose}>
