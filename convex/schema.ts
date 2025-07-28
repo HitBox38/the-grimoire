@@ -271,5 +271,11 @@ export default defineSchema({
     forms: v.optional(v.array(referenceObject)),
   })
     .index("by_name", ["name"])
-    .index("by_string_id", ["id"]),
+    .index("by_string_id", ["id"])
+    .searchIndex("search_name", {
+      searchField: "name",
+    })
+    .searchIndex("search_type", {
+      searchField: "type",
+    }),
 });

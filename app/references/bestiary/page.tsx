@@ -5,6 +5,7 @@ import { PageHeader } from "@/components/PageHeader";
 import DataTable from "./data-table";
 import MonsterView from "./monsterView";
 import { useSearchParams } from "next/navigation";
+import { SearchBox } from "@/components/SearchBox";
 
 export default function Bestiary() {
   const searchParams = useSearchParams();
@@ -44,11 +45,14 @@ export default function Bestiary() {
         breadcrumbItems={breadcrumbItems}
       />
 
+      <div className="px-4"></div>
+
       {monsterId ? (
         // Two-panel layout when a monster is selected
         <main className="mx-auto px-4 py-6 h-[calc(100vh-200px)]">
           <ResizablePanelGroup direction="horizontal" className="h-full">
             <ResizablePanel defaultSize={50} className="flex flex-col min-h-0">
+              <SearchBox />
               <div className="h-full overflow-hidden">
                 <DataTable />
               </div>
@@ -63,7 +67,8 @@ export default function Bestiary() {
         </main>
       ) : (
         // Full-width layout when no monster is selected
-        <main className="px-4 py-6 h-[calc(100vh-200px)]">
+        <main className="px-4 py-6 h-[calc(100vh-250px)]">
+          <SearchBox />
           <div className="h-full w-full">
             <DataTable />
           </div>
