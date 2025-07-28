@@ -28,3 +28,31 @@ export const getById = query({
     return monster;
   },
 });
+
+export const getProperties = query({
+  args: {},
+  handler: async (ctx) => {
+    // gets all known keys from the monsters table
+    const properties = await ctx.db.query("monsters").collect();
+    const keys = new Set<string>();
+    properties.forEach((property) => {
+      Object.keys(property).forEach((key) => {
+        keys.add(key);
+      });
+    });
+    return Array.from(keys);
+  },
+});
+
+export const search = query({
+  args: {
+    query: v.string(),
+  },
+  handler: async (ctx, args) => {
+    const monsters = await ctx.db
+      .query("monsters")
+      .filter((q) => q.eq(q.field("name"), args.query))
+      .collect();
+    return monsters;
+  },
+});
