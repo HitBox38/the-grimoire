@@ -38,7 +38,7 @@ export const SearchBox = ({ properties }: Props) => {
     if (event.key === "Enter") {
       const parts = inputValue.split(":");
       if (parts.length === 2 && properties?.includes(parts[0])) {
-        const newFilters = { ...filters, [parts[0]]: parts[1] };
+        const newFilters = { ...filters, [parts[0]]: parts[1].trim() };
         setFilters(newFilters);
         setInputValue("");
         updateUrl(null, newFilters);

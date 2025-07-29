@@ -12,8 +12,8 @@ interface FilterBadgeProps {
 export const FilterBadge = ({ filterKey, value, onRemove }: FilterBadgeProps) => {
   return (
     <Badge variant="secondary" className="flex items-center gap-1">
-      <span>{filterKey}:</span>
-      <span className="font-semibold">{value}</span>
+      <span className="capitalize">{filterKey}:</span>
+      <span className="font-semibold"> {value}</span>
       <button onClick={() => onRemove(filterKey)} className="ml-1">
         <X className="h-3 w-3" />
       </button>
