@@ -69,14 +69,14 @@ export const SearchBox = ({ properties }: Props) => {
   };
 
   return (
-    <div className="flex flex-col gap-2 pb-2">
+    <div className="flex flex-col gap-2">
       <SearchInput
         value={inputValue}
         onChange={handleSearchChange}
         properties={properties ?? []}
         onKeyDown={handleKeyDown}
       />
-      <div className="flex gap-2">
+      <div className="flex gap-2 overflow-x-auto flex-nowrap pb-2">
         {Object.entries(filters).map(([key, value]) => (
           <FilterBadge key={key} filterKey={key} value={value} onRemove={removeFilter} />
         ))}

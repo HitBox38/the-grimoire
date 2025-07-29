@@ -49,7 +49,7 @@ export default function Bestiary() {
       />
       {monsterId ? (
         // Two-panel layout when a monster is selected
-        <main className="mx-auto px-4 py-6 h-[calc(100vh-200px)]">
+        <main className="mx-auto px-4 pt-6 h-[calc(100vh-200px)]">
           <ResizablePanelGroup direction="horizontal" className="h-full">
             <ResizablePanel defaultSize={50} className="flex flex-col min-h-0">
               <SearchBox properties={properties} />
@@ -66,7 +66,7 @@ export default function Bestiary() {
           </ResizablePanelGroup>
         </main>
       ) : (
-        <main className="px-4 py-6 h-[calc(100vh-250px)]">
+        <main className="px-4 pt-6 h-[calc(100vh-250px)]">
           <SearchBox properties={properties} />
           <div className="h-full w-full">
             <DataTable />

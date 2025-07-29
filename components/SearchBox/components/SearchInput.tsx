@@ -30,7 +30,7 @@ export const SearchInput = ({ value, onChange, properties, onKeyDown }: SearchIn
   }, [open]);
 
   return (
-    <Command>
+    <Command className="h-auto">
       <Popover open={open} onOpenChange={setOpen}>
         <PopoverTrigger asChild>
           <div className="relative w-full" ref={inputRef}>
