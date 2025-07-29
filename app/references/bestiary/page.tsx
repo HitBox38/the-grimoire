@@ -6,10 +6,13 @@ import DataTable from "./data-table";
 import MonsterView from "./monsterView";
 import { useSearchParams } from "next/navigation";
 import { SearchBox } from "@/components/SearchBox";
+import { useQuery } from "convex/react";
+import { api } from "@/convex/_generated/api";
 
 export default function Bestiary() {
   const searchParams = useSearchParams();
   const monsterId = searchParams.get("monsterId");
+  const properties = useQuery(api.monsters.getProperties);
 
   const breadcrumbItems = [
     { label: "Home", href: "/" },
@@ -44,15 +47,12 @@ export default function Bestiary() {
         description="Browse and search through monsters and creatures"
         breadcrumbItems={breadcrumbItems}
       />
-
-      <div className="px-4"></div>
-
       {monsterId ? (
         // Two-panel layout when a monster is selected
         <main className="mx-auto px-4 py-6 h-[calc(100vh-200px)]">
           <ResizablePanelGroup direction="horizontal" className="h-full">
             <ResizablePanel defaultSize={50} className="flex flex-col min-h-0">
-              <SearchBox />
+              <SearchBox properties={properties} />
               <div className="h-full overflow-hidden">
                 <DataTable />
               </div>
@@ -66,9 +66,8 @@ export default function Bestiary() {
           </ResizablePanelGroup>
         </main>
       ) : (
-        // Full-width layout when no monster is selected
         <main className="px-4 py-6 h-[calc(100vh-250px)]">
-          <SearchBox />
+          <SearchBox properties={properties} />
           <div className="h-full w-full">
             <DataTable />
           </div>

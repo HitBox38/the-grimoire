@@ -1,14 +1,15 @@
 "use client";
 
-import { useQuery } from "convex/react";
-import { api } from "@/convex/_generated/api";
 import { useSearchParams, useRouter, usePathname } from "next/navigation";
 import { SearchInput } from "./components/SearchInput";
 import { useState, useEffect } from "react";
 import { FilterBadge } from "./components/FilterBadge";
 
-export const SearchBox = () => {
-  const properties = useQuery(api.monsters.getProperties);
+interface Props {
+  properties?: string[];
+}
+
+export const SearchBox = ({ properties }: Props) => {
   const searchParams = useSearchParams();
   const router = useRouter();
   const pathname = usePathname();
