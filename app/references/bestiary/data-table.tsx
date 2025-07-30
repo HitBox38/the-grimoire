@@ -12,15 +12,26 @@ import {
 import { useQuery } from "convex/react";
 import { columns } from "./columns";
 import { LoaderPinwheelIcon } from "lucide-react";
-import { usePathname, useRouter } from "next/navigation";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { api } from "@/convex/_generated/api";
 
 export default function DataTable() {
   const pathname = usePathname();
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const search = searchParams.get("search");
+  const filters: Record<string, string> = {};
+  searchParams.forEach((value, key) => {
+    if (key !== "search" && key !== "monsterId") {
+      filters[key] = value;
+    }
+  });
 
-  const monsters = useQuery(api.monsters.get);
+  const monsters = useQuery(api.monsters.get, {
+    search: search ?? undefined,
+    filters,
+  });
 
   const table = useReactTable({
     data: monsters ?? [],
@@ -29,7 +40,7 @@ export default function DataTable() {
   });
 
   const handleRowClick = (monsterId: string) => {
-    const params = new URLSearchParams();
+    const params = new URLSearchParams(searchParams.toString());
     params.set("monsterId", monsterId);
     router.replace(`${pathname}?${params.toString()}`);
   };

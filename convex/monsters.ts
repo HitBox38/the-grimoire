@@ -1,11 +1,30 @@
-import { Id } from "./_generated/dataModel";
 import { query } from "./_generated/server";
 import { v } from "convex/values";
 
 export const get = query({
-  args: {},
-  handler: async (ctx) => {
-    const monsters = await ctx.db.query("monsters").collect();
+  args: {
+    search: v.optional(v.string()),
+    filters: v.optional(v.any()),
+  },
+  handler: async (ctx, args) => {
+    let monstersQuery;
+
+    if (args.search) {
+      monstersQuery = ctx.db
+        .query("monsters")
+        .withSearchIndex("search_name", (q) => q.search("name", args.search!));
+    } else {
+      monstersQuery = ctx.db.query("monsters");
+    }
+
+    if (args.filters) {
+      for (const [key, value] of Object.entries(args.filters)) {
+        monstersQuery = monstersQuery.filter((q) => q.eq(q.field(key as any), value as any));
+      }
+    }
+
+    const monsters = await monstersQuery.collect();
+
     return monsters.map((monster) => ({
       id: monster.id,
       name: monster.name,
@@ -26,5 +45,20 @@ export const getById = query({
       .filter((q) => q.eq(q.field("id"), args.id))
       .first();
     return monster;
+  },
+});
+
+export const getProperties = query({
+  args: {},
+  handler: async (ctx) => {
+    // gets all known keys from the monsters table
+    const properties = await ctx.db.query("monsters").collect();
+    const keys = new Set<string>();
+    properties.forEach((property) => {
+      Object.keys(property).forEach((key) => {
+        keys.add(key);
+      });
+    });
+    return Array.from(keys);
   },
 });

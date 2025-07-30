@@ -288,14 +288,14 @@ const Sidebar = React.forwardRef<
       {/* Hover trigger area when sidebar is collapsed */}
       {state === "collapsed" && (
         <div
-          className="fixed left-0 top-0 h-full w-8 z-40 bg-transparent hover:bg-sidebar/10 transition-colors duration-200"
+          className="fixed left-0 top-0 h-full w-8 z-60 bg-transparent hover:bg-sidebar/10 transition-colors duration-200"
           onMouseEnter={handleMouseEnter}
           title="Hover to expand sidebar"
         />
       )}
       <div
         className={cn(
-          "duration-300 fixed inset-y-0 z-10 hidden h-svh w-[--sidebar-width] transition-[left,right,width] ease-in-out lg:flex",
+          "duration-300 fixed inset-y-0 z-60 hidden h-svh w-[--sidebar-width] transition-[left,right,width] ease-in-out lg:flex",
           "left-0 group-data-[side=right]:left-auto group-data-[side=right]:right-0",
           // Adjust the padding for floating and inset variants.
           "group-data-[variant=floating]:p-2",
