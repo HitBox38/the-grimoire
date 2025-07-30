@@ -1,4 +1,3 @@
-import { Id } from "./_generated/dataModel";
 import { query } from "./_generated/server";
 import { v } from "convex/values";
 
