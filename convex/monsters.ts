@@ -63,16 +63,3 @@ export const getProperties = query({
     return Array.from(keys);
   },
 });
-
-export const search = query({
-  args: {
-    query: v.string(),
-  },
-  handler: async (ctx, args) => {
-    const monsters = await ctx.db
-      .query("monsters")
-      .filter((q) => q.eq(q.field("name"), args.query))
-      .collect();
-    return monsters;
-  },
-});
