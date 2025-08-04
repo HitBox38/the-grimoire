@@ -9,7 +9,6 @@ import {
   CommandGroup,
   CommandItem,
 } from "@/components/ui/command";
-import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 
 interface SearchInputProps {
   value: string;
@@ -21,6 +20,8 @@ interface SearchInputProps {
 export const SearchInput = ({ value, onChange, properties, onKeyDown }: SearchInputProps) => {
   const [open, setOpen] = useState(false);
   const inputRef = useRef<HTMLDivElement>(null);
+  const containerRef = useRef<HTMLDivElement>(null);
+  const commandInputRef = useRef<HTMLInputElement>(null);
   const [inputWidth, setInputWidth] = useState<number>(0);
 
   useEffect(() => {
@@ -29,42 +30,84 @@ export const SearchInput = ({ value, onChange, properties, onKeyDown }: SearchIn
     }
   }, [open]);
 
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (containerRef.current && !containerRef.current.contains(event.target as Node)) {
+        setOpen(false);
+      }
+    };
+
+    if (open) {
+      document.addEventListener("mousedown", handleClickOutside);
+    }
+
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [open]);
+
+  const handleInputFocus = () => {
+    if (!open) {
+      setOpen(true);
+    }
+  };
+
+  const handleInputClick = (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setOpen(true);
+  };
+
+  const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
+    if (event.key === "Escape") {
+      setOpen(false);
+    }
+    onKeyDown(event);
+  };
+
   return (
-    <Command className="h-auto">
-      <Popover open={open} onOpenChange={setOpen}>
-        <PopoverTrigger asChild>
-          <div className="relative w-full" ref={inputRef}>
-            <CommandInput
-              placeholder="Search by name or filter by property..."
-              value={value}
-              onValueChange={onChange}
-              className="w-full"
-              onFocus={() => setOpen(true)}
-              onKeyDown={onKeyDown}
-            />
-          </div>
-        </PopoverTrigger>
-        <PopoverContent
-          style={{ width: inputWidth > 0 ? `${inputWidth}px` : "100%" }}
-          className="p-0"
-          onOpenAutoFocus={(e) => e.preventDefault()}>
-          <CommandList>
-            <CommandEmpty>No results found.</CommandEmpty>
-            <CommandGroup heading="Suggestions">
-              {properties?.map((property) => (
-                <CommandItem
-                  key={property}
-                  onSelect={() => {
-                    onChange(`${property}:`);
-                    setOpen(false);
-                  }}>
-                  {property}:
-                </CommandItem>
-              ))}
-            </CommandGroup>
-          </CommandList>
-        </PopoverContent>
-      </Popover>
-    </Command>
+    <div className="relative w-full" ref={containerRef}>
+      <Command className="h-auto">
+        <div ref={inputRef}>
+          <CommandInput
+            ref={commandInputRef}
+            placeholder="Search by name or filter by property..."
+            value={value}
+            onValueChange={onChange}
+            className="w-full"
+            onFocus={handleInputFocus}
+            onClick={handleInputClick}
+            onKeyDown={handleKeyDown}
+          />
+        </div>
+      </Command>
+      {open && (
+        <div
+          className="absolute top-full left-0 z-50 mt-1 rounded-md border bg-popover p-0 text-popover-foreground shadow-md"
+          style={{ width: inputWidth > 0 ? `${inputWidth}px` : "100%" }}>
+          <Command>
+            <CommandList>
+              <CommandEmpty>No results found.</CommandEmpty>
+              <CommandGroup heading="Suggestions">
+                {properties?.map((property) => (
+                  <CommandItem
+                    key={property}
+                    onSelect={() => {
+                      onChange(`${property}:`);
+                      setOpen(false);
+                      // Focus the input after selection so user can immediately type the value
+                      setTimeout(() => {
+                        commandInputRef.current?.focus();
+                      }, 0);
+                    }}>
+                    {property}:
+                  </CommandItem>
+                ))}
+              </CommandGroup>
+            </CommandList>
+          </Command>
+        </div>
+      )}
+    </div>
   );
 };
